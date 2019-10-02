@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
-using CardDecks.Models.DataModels;
+using CardDecks.Models.Entities.Cards;
+using CardDecks.Models.Entities.Shufflers;
+using CardDecks.Models.Exceptions;
 using CardDecks.Models.Extensions;
 using CardDecks.Models.Services;
 using Microsoft.AspNetCore.Http;
@@ -12,7 +14,7 @@ namespace CardDecks.Controllers
 	[Produces("application/json")]
 	public class CardDecksController : Controller
 	{
-		// todo в гите сделать README
+		// todo в гите сделать README, написать там про рид ми и про то что шафлинк выбриается вот там вот в настройках
 		// todo ошибки типа колода с таким именем уже существует и название - не пустое
 		// todo возможно имеет смысл все прямо рестом сделать, то есть вынести все в отдельные модели и пометить фром бади
 		// todo интерфейсы
@@ -26,12 +28,20 @@ namespace CardDecks.Controllers
 
 		[HttpPost]
 		[ProducesResponseType(typeof(CardDeck), StatusCodes.Status201Created)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public IActionResult CreateOrderedCardDeck(string name)
 		{
 			// todo асинками все сделать
-			var cardDeck = _cardDecksService.CreateOrderedDeck(name);
+			try
+			{
+				var deck = _cardDecksService.CreateOrderedDeck(name);
 
-			return Ok(cardDeck.AsViewModel());
+				return Ok(deck.AsViewModel());
+			}
+			catch (DeckException ex)
+			{
+				return BadRequest(new { error = ex.Message });
+			}
 		}
 
 		[HttpGet]
@@ -51,17 +61,16 @@ namespace CardDecks.Controllers
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		public IActionResult GetCardDeck(string name)
 		{
-			var deck = _cardDecksService.GetByName(name);
-
-			if (deck is null)
+			try
 			{
-				return BadRequest(new
-				{
-					error = "Не удалось найти колоду с переданным названием"
-				});
-			}
+				var deck = _cardDecksService.GetByName(name);
 
-			return Ok(deck);
+				return Ok(deck);
+			}
+			catch (DeckException ex)
+			{
+				return BadRequest(new { error = ex.Message });
+			}
 		}
 
 		[HttpDelete]
@@ -71,6 +80,24 @@ namespace CardDecks.Controllers
 			_cardDecksService.Delete(name);
 
 			return Ok();
+		}
+
+		[HttpPut]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public IActionResult ShuffleCardDeck(string name)
+		{
+			try
+			{
+				var deck = _cardDecksService.GetByName(name);
+				var shuffledDeck = _cardDecksService.Shuffle(deck);
+
+				return Ok(shuffledDeck);
+			}
+			catch (DeckException ex)
+			{
+				return BadRequest(new { error = ex.Message });
+			}
 		}
 	}
 }

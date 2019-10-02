@@ -1,10 +1,11 @@
 ﻿using System.Linq;
+using CardDecks.Models.Entities.Cards;
 
 namespace CardDecks.Models.Extensions
 {
 	public static class CardDeckExtension
 	{
-		public static ViewModels.CardDeck AsViewModel(this DataModels.CardDeck dataModelCardDeck)
+		public static ViewModels.CardDeck AsViewModel(this CardDeck dataModelCardDeck)
 			=> new ViewModels.CardDeck
 			{
 				Name = dataModelCardDeck.Name,

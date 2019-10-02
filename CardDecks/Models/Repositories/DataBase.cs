@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CardDecks.Models.DataModels;
+using CardDecks.Models.Entities.Cards;
 
 namespace CardDecks.Models.Repositories
 {

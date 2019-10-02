@@ -1,4 +1,4 @@
-﻿namespace CardDecks.Models.DataModels
+﻿namespace CardDecks.Models.Entities.Cards
 {
 	public enum CardSuit
 	{
