@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CardDecks.Models.Entities.Cards
+namespace CardDecks.Models.DataModel
 {
 	public class CardDeck
 	{

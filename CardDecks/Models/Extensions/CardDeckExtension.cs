@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using CardDecks.Models.Entities.Cards;
+using CardDecks.Models.DataModel;
 
 namespace CardDecks.Models.Extensions
 {

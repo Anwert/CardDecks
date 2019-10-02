@@ -1,18 +1,32 @@
-﻿using CardDecks.Models.Entities.Shufflers;
-using CardDecks.Models.Repositories;
-using CardDecks.Models.Services;
+﻿using System;
+using CardDecks.Models.BusinessLogic.Repositories;
+using CardDecks.Models.BusinessLogic.Services;
+using CardDecks.Models.BusinessLogic.Shufflers;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CardDecks.Models.Extensions
 {
 	public static class ServiceCollectionExtension
 	{
-		public static void AddCustomServices(this IServiceCollection services)
+		public static void AddCustomServices(this IServiceCollection services, IConfiguration config)
 		{
-			// todo интерфейсы
-			services.AddSingleton<CardDecksService>();
-			services.AddSingleton<CardDecksRepository>();
-			services.AddSingleton<IShuffler, SimpleShuffler>();
+			services.AddSingleton<ICardDecksService, CardDecksService>();
+			services.AddSingleton<ICardDecksRepository, CardDecksRepository>();
+
+			switch (config.GetValue<string>("ShufflingAlgorithm"))
+			{
+				case "Simple":
+					services.AddSingleton<IShuffler, SimpleShuffler>();
+					break;
+
+				case "Manual":
+					services.AddSingleton<IShuffler, ManualShuffler>();
+					break;
+
+				default:
+					throw new Exception(@"В настройках приложения должна быть указана переменная ""ShufflingAlgorithm"" со значением ""Manual"" или ""Simple""");
+			}
 		}
 	}
 }

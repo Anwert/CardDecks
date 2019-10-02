@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using CardDecks.Models.Entities.Cards;
+using CardDecks.Models.DataModel;
 
-namespace CardDecks.Models.Repositories
+namespace CardDecks.Models.BusinessLogic.Repositories
 {
 	/// <summary>
 	/// Имитация базы данных

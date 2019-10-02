@@ -22,7 +22,7 @@ namespace CardDecks
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-			services.AddCustomServices();
+			services.AddCustomServices(Configuration);
 
 			services.AddSwaggerGen(c =>
 			{

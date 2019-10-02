@@ -1,4 +1,4 @@
-﻿namespace CardDecks.Models.Entities.Cards
+﻿namespace CardDecks.Models.DataModel
 {
 	public struct Card
 	{

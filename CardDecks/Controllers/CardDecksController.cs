@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using CardDecks.Models.Entities.Cards;
-using CardDecks.Models.Entities.Shufflers;
+using System.Threading.Tasks;
+using CardDecks.Models.BusinessLogic.Services;
 using CardDecks.Models.Exceptions;
 using CardDecks.Models.Extensions;
-using CardDecks.Models.Services;
+using CardDecks.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,13 +15,9 @@ namespace CardDecks.Controllers
 	public class CardDecksController : Controller
 	{
 		// todo в гите сделать README, написать там про рид ми и про то что шафлинк выбриается вот там вот в настройках
-		// todo ошибки типа колода с таким именем уже существует и название - не пустое
-		// todo возможно имеет смысл все прямо рестом сделать, то есть вынести все в отдельные модели и пометить фром бади
-		// todo интерфейсы
+		private readonly ICardDecksService _cardDecksService;
 
-		private readonly CardDecksService _cardDecksService;
-
-		public CardDecksController(CardDecksService cardDecksService)
+		public CardDecksController(ICardDecksService cardDecksService)
 		{
 			_cardDecksService = cardDecksService;
 		}
@@ -29,12 +25,11 @@ namespace CardDecks.Controllers
 		[HttpPost]
 		[ProducesResponseType(typeof(CardDeck), StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult CreateOrderedCardDeck(string name)
+		public async Task<IActionResult> CreateOrderedCardDeck([FromBody] CardName cardName)
 		{
-			// todo асинками все сделать
 			try
 			{
-				var deck = _cardDecksService.CreateOrderedDeck(name);
+				var deck = await _cardDecksService.CreateOrderedDeckAsync(cardName.Name);
 
 				return Ok(deck.AsViewModel());
 			}
@@ -46,24 +41,21 @@ namespace CardDecks.Controllers
 
 		[HttpGet]
 		[ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
-		public IActionResult GetCardDeckNames()
+		public async Task<IActionResult> GetCardDeckNames()
 		{
-			var names = _cardDecksService.GetDeckNames();
+			var names = await _cardDecksService.GetDeckNamesAsync();
 
 			return Ok(names);
 		}
 
-		/// <summary>
-		/// Возвращает колоду по названию. Если колоды не существует возвращает 400
-		/// </summary>
 		[HttpGet]
 		[ProducesResponseType(typeof(CardDeck), StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult GetCardDeck(string name)
+		public async Task<IActionResult> GetCardDeck(string name)
 		{
 			try
 			{
-				var deck = _cardDecksService.GetByName(name);
+				var deck = await _cardDecksService.GetByNameAsync(name);
 
 				return Ok(deck);
 			}
@@ -75,9 +67,9 @@ namespace CardDecks.Controllers
 
 		[HttpDelete]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		public IActionResult DeleteCardDeck(string name)
+		public async Task<IActionResult> DeleteCardDeck([FromBody] CardName cardName)
 		{
-			_cardDecksService.Delete(name);
+			await _cardDecksService.DeleteAsync(cardName.Name);
 
 			return Ok();
 		}
@@ -85,12 +77,12 @@ namespace CardDecks.Controllers
 		[HttpPut]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public IActionResult ShuffleCardDeck(string name)
+		public async Task<IActionResult> ShuffleCardDeck([FromBody] CardName cardName)
 		{
 			try
 			{
-				var deck = _cardDecksService.GetByName(name);
-				var shuffledDeck = _cardDecksService.Shuffle(deck);
+				var deck = await _cardDecksService.GetByNameAsync(cardName.Name);
+				var shuffledDeck = await _cardDecksService.ShuffleAsync(deck);
 
 				return Ok(shuffledDeck);
 			}
