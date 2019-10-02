@@ -1,5 +1,6 @@
 ﻿using System;
 using CardDecks;
+using FizzWare.NBuilder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -8,6 +9,7 @@ namespace CardDecksTests
 {
 	public abstract class BaseTest
 	{
+		protected RandomGenerator RandomGenerator = new RandomGenerator();
 		private IServiceProvider _serviceProvider;
 
 		[OneTimeSetUp]
@@ -22,14 +24,14 @@ namespace CardDecksTests
 			var startup = new Startup(config);
 			startup.ConfigureServices(services);
 
-			RegisterMocks(services);
+			RegisterServicesForTests(services);
 
 			_serviceProvider = services.BuildServiceProvider();
 		}
 
 		protected T Resolve<T>() => (T)_serviceProvider.GetService(typeof(T));
 
-		protected virtual void RegisterMocks(IServiceCollection services)
+		protected virtual void RegisterServicesForTests(IServiceCollection services)
 		{
 		}
 	}

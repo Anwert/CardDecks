@@ -1,6 +1,6 @@
 ﻿namespace CardDecks.Models.DataModel
 {
-	public struct Card
+	public class Card
 	{
 		public CardValue Value { get; set; }
 

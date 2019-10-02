@@ -6,7 +6,6 @@ using CardDecks.Models.BusinessLogic.Shufflers;
 using CardDecks.Models.DataModel;
 using CardDecks.Models.Exceptions;
 using CardDecksTests.Extensions;
-using FizzWare.NBuilder;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -20,12 +19,11 @@ namespace CardDecksTests.Models.BusinessLogic.Services
 	{
 		private const string NAME = "name";
 
-		private RandomGenerator _randomGenerator = new RandomGenerator();
 		private ICardDecksService _service;
 		private ICardDecksRepository _cardDecksRepository;
 		private IShuffler _shuffler;
 
-		protected override void RegisterMocks(IServiceCollection services)
+		protected override void RegisterServicesForTests(IServiceCollection services)
 		{
 			services.AddMock<ICardDecksRepository>();
 			services.AddMock<IShuffler>();
@@ -70,7 +68,7 @@ namespace CardDecksTests.Models.BusinessLogic.Services
 		[Test]
 		public async Task GetDeckNamesAsync_returns_result_from_repository()
 		{
-			var deckNames = Enumerable.Range(0, 100).Select(x => _randomGenerator.Phrase(10)).ToList();
+			var deckNames = Enumerable.Range(0, 100).Select(x => RandomGenerator.Phrase(10)).ToList();
 
 			_cardDecksRepository.GetDeckNamesAsync().Returns(deckNames);
 
