@@ -11,14 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace CardDecksTests.Models.BusinessLogic.Services
+namespace CardDecksTests.UnitTests.Models.BusinessLogic.Services
 {
 	[TestFixture]
 	[Parallelizable(ParallelScope.Self)]
 	public class CardDecksServiceTests : BaseTest
 	{
-		private const string NAME = "name";
-
 		private ICardDecksService _service;
 		private ICardDecksRepository _cardDecksRepository;
 		private IShuffler _shuffler;
@@ -47,21 +45,23 @@ namespace CardDecksTests.Models.BusinessLogic.Services
 		[Test]
 		public void CreateOrderedDeckAsync_throws_if_deck_with_passed_name_exists()
 		{
+			var name = RandomGenerator.Phrase(10);
 			var deck = new CardDeck();
 
-			_cardDecksRepository.GetByNameAsync(NAME).Returns(deck);
+			_cardDecksRepository.GetByNameAsync(name).Returns(deck);
 
-			Assert.ThrowsAsync<DeckAlreadyExistsException>(async () => await _service.CreateOrderedDeckAsync(NAME));
+			Assert.ThrowsAsync<DeckAlreadyExistsException>(async () => await _service.CreateOrderedDeckAsync(name));
 		}
 		
 		[Test]
 		public async Task CreateOrderedDeckAsync_creates_new_deck()
 		{
-			var deck = await _service.CreateOrderedDeckAsync(NAME);
+			var name = RandomGenerator.Phrase(10);
+			var deck = await _service.CreateOrderedDeckAsync(name);
 
 			_cardDecksRepository.Received().CreateAsync(Arg.Is<CardDeck>(x => x.Cards.Count > 0));
 
-			deck.Name.Should().Be(NAME);
+			deck.Name.Should().Be(name);
 			deck.Cards.Should().HaveCountGreaterThan(0);
 		}
 
@@ -80,11 +80,12 @@ namespace CardDecksTests.Models.BusinessLogic.Services
 		[Test]
 		public async Task GetByNameAsync_returns_result_from_repository()
 		{
+			var name = RandomGenerator.Phrase(10);
 			var deck = new CardDeck();
 
-			_cardDecksRepository.GetByNameAsync(NAME).Returns(deck);
+			_cardDecksRepository.GetByNameAsync(name).Returns(deck);
 
-			var result = await _service.GetByNameAsync(NAME);
+			var result = await _service.GetByNameAsync(name);
 
 			result.Should().BeSameAs(deck);
 		}
@@ -92,9 +93,11 @@ namespace CardDecksTests.Models.BusinessLogic.Services
 		[Test]
 		public void GetByNameAsync_throws_if_repository_returns_null()
 		{
-			_cardDecksRepository.GetByNameAsync(NAME).Returns((CardDeck)null);
+			var name = RandomGenerator.Phrase(10);
 
-			Assert.ThrowsAsync<DeckNotFoundException>(async () => await _service.GetByNameAsync(NAME));
+			_cardDecksRepository.GetByNameAsync(name).Returns((CardDeck)null);
+
+			Assert.ThrowsAsync<DeckNotFoundException>(async () => await _service.GetByNameAsync(name));
 		}
 
 		[Test]

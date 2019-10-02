@@ -3,21 +3,13 @@ using CardDecks.Models.BusinessLogic.Shufflers;
 using CardDecks.Models.DataModel;
 using FizzWare.NBuilder;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace CardDecksTests.Models.BusinessLogic.Shufflers
+namespace CardDecksTests.UnitTests.Models.BusinessLogic.Shufflers
 {
-	public class ManualShufflerTests : BaseTest
+	public abstract class ShufflerTests : BaseTest
 	{
-		private const string NAME = "name";
-
 		private IShuffler _shuffler;
-
-		protected override void RegisterServicesForTests(IServiceCollection services)
-		{
-			services.AddSingleton<IShuffler, ManualShuffler>();
-		}
 
 		[OneTimeSetUp]
 		public void OneTimeSetUp()
@@ -28,6 +20,8 @@ namespace CardDecksTests.Models.BusinessLogic.Shufflers
 		[Test]
 		public void Shuffle_shuffles_cards()
 		{
+			var name = RandomGenerator.Phrase(10);
+
 			var cards = Builder<Card>.CreateListOfSize(100)
 				.All()
 				.With(x => x.Suit = RandomGenerator.Enumeration<CardSuit>())
@@ -35,11 +29,11 @@ namespace CardDecksTests.Models.BusinessLogic.Shufflers
 				.Build()
 				.ToList();
 
-			var deck = new CardDeck { Name = NAME, Cards = cards };
+			var deck = new CardDeck { Name = name, Cards = cards };
 
 			var shuffledDeck = _shuffler.Shuffle(deck);
 
-			shuffledDeck.Name.Should().Be(NAME);
+			shuffledDeck.Name.Should().Be(name);
 			shuffledDeck.Cards.Should().BeEquivalentTo(cards);
 
 			Assert.False(shuffledDeck.Cards.SequenceEqual(cards));

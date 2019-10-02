@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CardDecks.Models.BusinessLogic.Services;
+using CardDecks.Models.Errors;
 using CardDecks.Models.Exceptions;
 using CardDecks.Models.Extensions;
 using CardDecks.Models.ViewModels;
@@ -35,7 +36,7 @@ namespace CardDecks.Controllers
 			}
 			catch (DeckException ex)
 			{
-				return BadRequest(new { error = ex.Message });
+				return BadRequest(new CardDeckError { Error = ex.Message });
 			}
 		}
 
@@ -57,11 +58,11 @@ namespace CardDecks.Controllers
 			{
 				var deck = await _cardDecksService.GetByNameAsync(name);
 
-				return Ok(deck);
+				return Ok(deck.AsViewModel());
 			}
 			catch (DeckException ex)
 			{
-				return BadRequest(new { error = ex.Message });
+				return BadRequest(new CardDeckError { Error = ex.Message });
 			}
 		}
 
@@ -84,11 +85,11 @@ namespace CardDecks.Controllers
 				var deck = await _cardDecksService.GetByNameAsync(cardName.Name);
 				var shuffledDeck = await _cardDecksService.ShuffleAsync(deck);
 
-				return Ok(shuffledDeck);
+				return Ok(shuffledDeck.AsViewModel());
 			}
 			catch (DeckException ex)
 			{
-				return BadRequest(new { error = ex.Message });
+				return BadRequest(new CardDeckError { Error = ex.Message });
 			}
 		}
 	}
