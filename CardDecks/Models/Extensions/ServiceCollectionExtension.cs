@@ -14,18 +14,18 @@ namespace CardDecks.Models.Extensions
 			services.AddSingleton<ICardDecksService, CardDecksService>();
 			services.AddSingleton<ICardDecksRepository, CardDecksRepository>();
 
-			switch (config.GetValue<string>("ShufflingAlgorithm"))
+			switch (config.GetValue<string>(Consts.SHUFFLING_ALGORITHM_SETTING_NAME))
 			{
-				case "Simple":
+				case Consts.SHUFFLING_ALGORITHM_SIMPLE:
 					services.AddSingleton<IShuffler, SimpleShuffler>();
 					break;
 
-				case "Manual":
+				case Consts.SHUFFLING_ALGORITHM_MANUAL:
 					services.AddSingleton<IShuffler, ManualShuffler>();
 					break;
 
 				default:
-					throw new Exception(@"В настройках приложения должна быть указана переменная ""ShufflingAlgorithm"" со значением ""Manual"" или ""Simple""");
+					throw new Exception($@"В настройках приложения должна быть указана переменная ""{Consts.SHUFFLING_ALGORITHM_SETTING_NAME}"" со значением ""{Consts.SHUFFLING_ALGORITHM_SIMPLE}"" или ""{Consts.SHUFFLING_ALGORITHM_MANUAL}""");
 			}
 		}
 	}

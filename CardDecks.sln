@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29318.209
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardDecks", "CardDecks\CardDecks.csproj", "{993B9580-26CE-4AB8-88DB-799D3D8F15B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CardDecks", "CardDecks\CardDecks.csproj", "{993B9580-26CE-4AB8-88DB-799D3D8F15B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardDecksTests", "CardDecksTests\CardDecksTests.csproj", "{C08C3FF4-892C-4304-A66F-8D21B2F4D7FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{993B9580-26CE-4AB8-88DB-799D3D8F15B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{993B9580-26CE-4AB8-88DB-799D3D8F15B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{993B9580-26CE-4AB8-88DB-799D3D8F15B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C08C3FF4-892C-4304-A66F-8D21B2F4D7FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C08C3FF4-892C-4304-A66F-8D21B2F4D7FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C08C3FF4-892C-4304-A66F-8D21B2F4D7FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C08C3FF4-892C-4304-A66F-8D21B2F4D7FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
