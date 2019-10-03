@@ -15,7 +15,6 @@ namespace CardDecks.Controllers
 	[Produces("application/json")]
 	public class CardDecksController : Controller
 	{
-		// todo в гите сделать README, написать там про рид ми и про то что шафлинк выбриается вот там вот в настройках
 		private readonly ICardDecksService _cardDecksService;
 
 		public CardDecksController(ICardDecksService cardDecksService)

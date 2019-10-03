@@ -21,14 +21,6 @@ namespace CardDecks.Models.BusinessLogic.Repositories
 					return _cardDecks;
 				}
 			}
-
-			set
-			{
-				lock (LockObj)
-				{
-					_cardDecks = value;
-				}
-			}
 		}
 	}
 }

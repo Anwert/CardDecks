@@ -43,6 +43,12 @@ namespace CardDecksTests.UnitTests.Models.BusinessLogic.Services
 		}
 
 		[Test]
+		public void CreateOrderedDeckAsync_throws_if_name_is_empty()
+		{
+			Assert.ThrowsAsync<InvalidDeckNameException>(async () => await _service.CreateOrderedDeckAsync(string.Empty));
+		}
+
+		[Test]
 		public void CreateOrderedDeckAsync_throws_if_deck_with_passed_name_exists()
 		{
 			var name = RandomGenerator.Phrase(10);
@@ -63,6 +69,8 @@ namespace CardDecksTests.UnitTests.Models.BusinessLogic.Services
 
 			deck.Name.Should().Be(name);
 			deck.Cards.Should().HaveCountGreaterThan(0);
+
+			Assert.That(deck.Cards, Is.Ordered.By("Suit").Then.By("Value"));
 		}
 
 		[Test]

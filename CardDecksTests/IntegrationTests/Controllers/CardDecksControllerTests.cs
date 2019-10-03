@@ -4,6 +4,7 @@ using CardDecks.Controllers;
 using CardDecks.Models.BusinessLogic.Services;
 using CardDecks.Models.Errors;
 using CardDecks.Models.Exceptions;
+using CardDecks.Models.Extensions;
 using CardDecks.Models.ViewModels;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -32,7 +33,7 @@ namespace CardDecksTests.IntegrationTests.Controllers
 		}
 
 		[Test]
-		public async Task CreateOrderedCardDeck_returns_200_not_empty_deck()
+		public async Task CreateOrderedCardDeck_returns_200_with_not_empty_deck()
 		{
 			var name = await GetNotExistingDeckNameAsync();
 
@@ -103,20 +104,17 @@ namespace CardDecksTests.IntegrationTests.Controllers
 		[Test]
 		public async Task ShuffleCardDeck_returns_200_with_shuffled_deck()
 		{
-			// todo дописать тесты
 			var name = await CreateDeckAsync();
-			var beforeShuffling = await _cardDecksService.GetByNameAsync(name);
 
 			var result = (OkObjectResult)await _controller.ShuffleCardDeck(new CardName { Name = name });
 			var resultValue = (CardDeck) result.Value;
 
-			var expected = await _cardDecksService.GetByNameAsync(name);
+			var deckAfterShuffling = (await _cardDecksService.GetByNameAsync(name)).AsViewModel();
 
-			//resultValue.Should().BeEquivalentTo(expected, o => o.WithStrictOrderingFor(x => x.Cards));
+			resultValue.Name.Should().Be(name);
+			resultValue.Should().BeEquivalentTo(deckAfterShuffling, o => o.WithStrictOrderingFor(x => x.Cards));
 
-			//var qwe = resultValue.Cards.SequenceEqual(beforeShuffling.Cards);
-
-			//Assert.False(resultValue.Cards.SequenceEqual(beforeShuffling.Cards));
+			Assert.That(resultValue.Cards, Is.Not.Ordered.By("Suit").Then.By("Value"));
 		}
 
 		private async Task<string> GetNotExistingDeckNameAsync()

@@ -22,6 +22,9 @@ namespace CardDecks.Models.BusinessLogic.Services
 
 		public async Task<CardDeck> CreateOrderedDeckAsync(string name)
 		{
+			if (name is null || !name.Any())
+				throw new InvalidDeckNameException();
+
 			var existingDeck = await _cardDecksRepository.GetByNameAsync(name);
 			if (!(existingDeck is null))
 				throw new DeckAlreadyExistsException();

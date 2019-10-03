@@ -9,7 +9,7 @@ namespace CardDecksTests
 {
 	public abstract class BaseTest
 	{
-		protected RandomGenerator RandomGenerator = new RandomGenerator();
+		protected readonly RandomGenerator RandomGenerator = new RandomGenerator();
 		private IServiceProvider _serviceProvider;
 
 		[OneTimeSetUp]

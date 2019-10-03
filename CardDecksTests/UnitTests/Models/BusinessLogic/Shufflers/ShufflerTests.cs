@@ -24,8 +24,8 @@ namespace CardDecksTests.UnitTests.Models.BusinessLogic.Shufflers
 
 			var cards = Builder<Card>.CreateListOfSize(100)
 				.All()
-				.With(x => x.Suit = RandomGenerator.Enumeration<CardSuit>())
-				.With(x => x.Value = RandomGenerator.Enumeration<CardValue>())
+					.With(x => x.Suit = RandomGenerator.Enumeration<CardSuit>())
+					.With(x => x.Value = RandomGenerator.Enumeration<CardValue>())
 				.Build()
 				.ToList();
 
